@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#f5f3ef">
+<title>FORM | Low-poly Studio 0.2.2</title>
+<style>
+:root{
+ --bg:#f5f3ef;
+ --bg-elev:#efede8;
+ --panel:#ffffff;
+ --panel2:#f7f7fb;
+ --stage:#ebe8e2;
+ --stage-2:#f5f4f0;
+ --line:#e3e1db;
+ --line-strong:#d6d2ca;
+ --muted:#667085;
+ --muted-2:#8c95a3;
+ --text:#171923;
+ --text-soft:#394150;
+ --accent:#5b5ce2;
+ --accent-strong:#4d4fd4;
+ --accent-soft:#eef0ff;
+ --good:#198754;
+ --danger:#d94f4f;
+ --danger-soft:#fff0f0;
+ --shadow:0 18px 44px rgba(23,25,35,.08);
+ --shadow-soft:0 4px 16px rgba(23,25,35,.06);
+ --radius:18px;
+ --radius-sm:12px;
+ --tap:44px;
+ color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+ :root{
+  --bg:#171a22;
+  --bg-elev:#1d222d;
+  --panel:#202632;
+  --panel2:#252d3a;
+  --stage:#1b222d;
+  --stage-2:#222938;
+  --line:#333d4d;
+  --line-strong:#424e60;
+  --muted:#a3adba;
+  --muted-2:#8994a3;
+  --text:#f5f7fb;
+  --text-soft:#dce2ea;
+  --accent:#7375ff;
+  --accent-strong:#898bff;
+  --accent-soft:#2a3152;
+  --good:#56c48b;
+  --danger:#ff7c7c;
+  --danger-soft:#432a33;
+  --shadow:0 24px 70px rgba(0,0,0,.32);
+  --shadow-soft:0 8px 22px rgba(0,0,0,.18);
+  color-scheme:dark;
+ }
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px}
+body{padding:14px}
+button,input,select{font:inherit}
+button{color:inherit;cursor:pointer}
+button:disabled{opacity:.45;cursor:default}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#app{height:calc(100dvh - 28px);display:grid;grid-template-rows:72px minmax(0,1fr);grid-template-columns:288px minmax(0,1fr) 320px;grid-template-areas:'top top top' 'left stage right';gap:16px}
+header,.side,.stage{border:1px solid var(--line);box-shadow:var(--shadow-soft)}
+header{position:relative;grid-area:top;background:var(--panel);border-radius:22px;display:flex;align-items:center;gap:16px;padding:0 18px;z-index:4;min-width:0}
+.brand{display:flex;align-items:center;gap:12px;min-width:170px}
+.logo{display:grid;place-items:center;background:var(--accent);color:#fff;width:42px;height:42px;border-radius:14px;font-size:18px;font-weight:900;box-shadow:0 1px 0 rgba(255,255,255,.3) inset, 0 12px 25px rgba(91,92,226,.24)}
+.brandname{font-size:16px;font-weight:900;letter-spacing:-.02em;line-height:1}.brandsub{font-size:11px;color:var(--muted);letter-spacing:.02em;margin-top:4px}
+.projectname{background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:14px;padding:12px 14px;width:min(280px,22vw);min-width:120px;font-weight:700}
+.projectname::placeholder{color:var(--muted-2)}
+.header-actions{display:flex;align-items:center;gap:8px;margin-left:auto;white-space:nowrap;min-width:0}
+.btn,.viewbtn,.tabs button,.shape,.tree-row .eye{transition:background .15s,border-color .15s,color .15s,box-shadow .15s,transform .15s}
+.btn{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:10px 14px;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;font-weight:700;color:var(--text)}
+.btn:hover,.viewbtn:hover{background:var(--accent-soft);border-color:rgba(91,92,226,.25)}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:800;box-shadow:0 10px 20px rgba(91,92,226,.18)}
+.btn.primary:hover{background:var(--accent-strong)}
+.btn.small{padding:9px 12px;min-height:40px}
+.btn.ghost{background:transparent}
+.btn.active{background:var(--accent-soft);border-color:rgba(91,92,226,.25);color:var(--accent)}
+.iconbtn{width:40px;height:40px;padding:0;font-size:18px}
+.saved{font-size:12px;color:var(--good);font-weight:700;min-width:52px}
+.hint,.subhint{color:var(--muted);font-size:12px;line-height:1.55}
+.side{background:var(--panel);min-height:0;overflow:auto;border-radius:24px}
+.left{grid-area:left}.right{grid-area:right}
+.sect{padding:18px;border-bottom:1px solid var(--line)}
+.sect:last-child{border-bottom:0}
+.sect-title{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 14px}
+.shape-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.shape{background:var(--panel2);border:1px solid var(--line);border-radius:18px;min-height:92px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-weight:750;color:var(--text);padding:10px}
+.shape:hover{border-color:rgba(91,92,226,.28);background:var(--accent-soft);transform:translateY(-1px)}
+.shape svg{width:38px;height:38px;overflow:visible}
+.shape span{font-size:11px}
+.tree{display:flex;flex-direction:column;gap:8px;min-height:30px}
+.tree-row{border:1px solid var(--line);background:var(--panel2);border-radius:16px;padding:12px 10px;display:flex;align-items:center;gap:10px;color:var(--text);cursor:pointer;min-width:0;box-shadow:0 1px 0 rgba(255,255,255,.45) inset}
+.tree-row:hover{border-color:rgba(91,92,226,.24);background:var(--accent-soft)}
+.tree-row.selected{background:var(--accent-soft);border-color:rgba(91,92,226,.34);box-shadow:0 0 0 1px rgba(91,92,226,.08) inset}
+.tree-row .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;font-weight:700}
+.tree-row .type{font-size:10px;color:var(--muted);text-transform:capitalize}
+.tree-row .dot{width:12px;height:12px;border-radius:4px;flex-shrink:0;border:1px solid rgba(0,0,0,.08)}
+.tree-row .eye{background:transparent;border:1px solid transparent;color:var(--muted);font-size:14px;padding:6px 8px;border-radius:10px;min-width:34px;min-height:34px}
+.tree-row .eye:hover{background:rgba(91,92,226,.08);border-color:rgba(91,92,226,.16);color:var(--accent)}
+.tree-empty{color:var(--muted);padding:8px 4px;line-height:1.6}
+.stage{grid-area:stage;min-height:0;min-width:0;position:relative;overflow:hidden;border-radius:28px;background:radial-gradient(circle at 50% 18%,var(--stage-2) 0,var(--stage) 55%,var(--bg-elev) 100%)}
+#viewport{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+#viewport.dragging{cursor:grabbing}
+.toolbar{position:absolute;left:18px;top:18px;display:flex;gap:6px;background:rgba(255,255,255,.84);border:1px solid rgba(255,255,255,.65);padding:6px;border-radius:18px;box-shadow:var(--shadow);backdrop-filter:blur(12px)}
+@media (prefers-color-scheme:dark){.toolbar{background:rgba(32,38,50,.88);border-color:rgba(66,78,96,.75)}}
+.tool{min-width:76px;font-weight:800}
+.tool kbd,.kbd{font-size:10px;opacity:.7;font-weight:700;background:transparent;border:0;padding:0}
+.view-controls{position:absolute;right:18px;top:18px;display:flex;gap:8px}
+.viewbtn{border:1px solid rgba(255,255,255,.55);background:rgba(255,255,255,.84);border-radius:16px;padding:11px 13px;backdrop-filter:blur(12px);font-weight:700;min-height:42px}
+@media (prefers-color-scheme:dark){.viewbtn{background:rgba(32,38,50,.88);border-color:rgba(66,78,96,.75)}}
+.statpill{position:absolute;bottom:18px;left:18px;border:1px solid rgba(255,255,255,.6);background:rgba(255,255,255,.84);border-radius:999px;padding:10px 13px;color:var(--text-soft);font-size:11px;font-weight:700;pointer-events:none;backdrop-filter:blur(10px)}
+.help{position:absolute;bottom:18px;right:18px;text-align:right;line-height:1.55;color:var(--text-soft);font-size:11px;background:rgba(255,255,255,.72);padding:10px 12px;border-radius:16px;border:1px solid rgba(255,255,255,.55);backdrop-filter:blur(10px)}
+.stage-label{position:absolute;top:82px;left:22px;color:var(--muted);pointer-events:none;font-size:10px;letter-spacing:.12em;font-weight:900}
+@media (prefers-color-scheme:dark){.statpill,.help{background:rgba(32,38,50,.86);border-color:rgba(66,78,96,.75);color:var(--text-soft)}.stage-label{color:var(--muted)}}
+.tabs{display:none}
+.control-group{margin-bottom:18px}.control-columns{display:grid;grid-template-columns:1fr;gap:0}
+.field-label{font-size:12px;color:var(--text-soft);font-weight:800;margin-bottom:8px;display:flex;justify-content:space-between}.field-label span{font-weight:700;color:var(--muted)}
+.triple{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.axis-wrap{position:relative}.axis-label{position:absolute;top:11px;left:10px;font-size:10px;font-weight:900;pointer-events:none}
+.axis-label.x{color:#e16868}.axis-label.y{color:#2fa36b}.axis-label.z{color:#5b5ce2}
+.num,.text-field,.step-select{width:100%;min-width:0;border-radius:14px;background:var(--panel2);border:1px solid var(--line);padding:12px;color:var(--text);font-size:13px}
+.num{padding:11px 8px 11px 24px}
+.num:focus,.text-field:focus,.step-select:focus{border-color:rgba(91,92,226,.4);background:var(--panel)}
+.palette{display:flex;gap:8px;flex-wrap:wrap}
+.swatch{width:28px;height:28px;border-radius:10px;border:2px solid rgba(255,255,255,.9);padding:0;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
+.swatch.selected{outline:2px solid var(--accent);outline-offset:2px}
+.colorfield{width:100%;display:flex;align-items:center;gap:10px;margin-top:12px}.colorfield input{flex:1;min-width:0;height:42px;border:1px solid var(--line);padding:4px;border-radius:12px;background:var(--panel2)}.colorfield span{color:var(--muted);font-size:12px;font-weight:600}
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.action-grid .btn{width:100%}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 0;font-size:13px;color:var(--text-soft);font-weight:700}.toggle-row input{accent-color:var(--accent);width:18px;height:18px}
+.inspector-empty{text-align:center;color:var(--muted);padding:54px 18px;line-height:1.65}.inspector-empty strong{display:block;color:var(--text);font-size:16px;margin-bottom:8px}.empty-symbol{font-size:40px;opacity:.45;margin-bottom:12px}
+.footer-actions{display:flex;gap:7px;margin-top:14px}.mobile-only{display:none}
+.toast{position:absolute;z-index:10;bottom:72px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--panel);font-weight:800;font-size:12px;padding:12px 16px;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.18);opacity:0;pointer-events:none;transition:opacity .25s;max-width:85%;text-align:center}
+@media (prefers-color-scheme:dark){.toast{background:#f3f5fb;color:#10131a}}
+.toast.show{opacity:1}.divider{height:1px;background:var(--line);margin:14px 0}.kbd{color:var(--muted)}
+.modal-backdrop{position:fixed;inset:0;background:rgba(14,17,25,.45);z-index:30;display:none;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(10px)}.modal-backdrop.open{display:flex}
+.modal{width:min(520px,100%);max-height:88dvh;overflow-y:auto;background:var(--panel);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:22px}.modal h2{margin:2px 0 8px;font-size:28px;letter-spacing:-.03em}.modal p{color:var(--muted);line-height:1.6;font-size:13px}.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}.modal-choice{width:100%;padding:16px;border:1px solid var(--line);border-radius:16px;background:var(--panel2);color:var(--text);text-align:left;margin:8px 0}.modal-choice:hover{border-color:rgba(91,92,226,.32);background:var(--accent-soft)}.modal-choice strong{display:block;margin-bottom:4px}.modal-choice small{color:var(--muted)}
+#fileInput{display:none}.hide{display:none!important}
+@media(max-width:1200px){#app{grid-template-columns:250px minmax(0,1fr) 296px}.projectname{width:190px}}
+@media(max-width:1024px){#app{grid-template-columns:220px minmax(0,1fr) 270px}.header-actions .btn{padding:10px 11px}.header-actions .desktop-only{display:none}.projectname{width:150px}}
+@media(max-width:750px){
+ body{padding:10px}
+ #app{height:calc(100dvh - 20px);grid-template-rows:68px minmax(0,1fr);grid-template-columns:1fr;grid-template-areas:'top' 'stage';gap:10px}
+ header{padding:0 10px;gap:8px;border-radius:20px}
+ .brand{min-width:0;gap:8px}.logo{width:38px;height:38px;font-size:16px;border-radius:12px}.brandname{font-size:14px}.brandsub{font-size:10px}
+ .projectname{max-width:120px;width:28vw;min-width:70px;font-size:13px;padding:10px 12px;border-radius:12px}
+ .header-actions{gap:5px}.header-actions .btn{min-width:var(--tap);height:var(--tap);font-size:0;padding:0 8px;border-radius:12px}.header-actions .btn .bicon{font-size:16px}.header-actions .btn.primary .bicon{font-size:17px}.header-actions #saveStatus{display:none}
+ .desktop-only{display:none!important}.mobile-only{display:flex}
+ .left,.right{grid-area:stage;position:absolute;z-index:5;left:10px;right:10px;bottom:10px;width:auto;height:min(43dvh,390px);background:rgba(255,255,255,.93);border:1px solid rgba(255,255,255,.7);border-radius:22px 22px 14px 14px;box-shadow:0 -10px 36px rgba(23,25,35,.15);backdrop-filter:blur(20px);padding:0;overflow:auto}
+ @media (prefers-color-scheme:dark){.left,.right{background:rgba(32,38,50,.95);border-color:rgba(66,78,96,.75)}}
+ .left{display:block}.right{display:none}.right.mobile-open{display:block}.left.mobile-hidden{display:none}
+ .tabs{display:flex;position:sticky;top:0;background:transparent;z-index:1;padding:12px 12px 0;gap:8px}.tabs button{flex:1;padding:12px;border:1px solid transparent;background:var(--panel2);color:var(--muted);border-radius:14px;font-weight:800;min-height:var(--tap)}.tabs button.active{background:var(--accent-soft);border-color:rgba(91,92,226,.24);color:var(--accent)}
+ .sect{padding:14px}.sect-title{margin-bottom:10px}.shape-grid{grid-template-columns:repeat(3,1fr);gap:8px}.shape{min-height:72px;border-radius:16px}.shape svg{width:28px;height:28px}.shape span{font-size:10px}
+ .stage-label{top:76px;left:16px}.toolbar{top:12px;left:12px;gap:4px;padding:4px;border-radius:16px}.tool{min-width:54px;font-size:11px;padding:10px 8px;min-height:var(--tap)}.tool kbd{display:none}.view-controls{top:12px;right:12px;gap:6px}.viewbtn{font-size:11px;padding:10px 10px;min-height:var(--tap);border-radius:14px}
+ .statpill{bottom:calc(min(43dvh,390px) + 24px);left:14px;padding:8px 10px;font-size:10px}.help{display:none}.toast{bottom:calc(min(43dvh,390px) + 64px)}.control-group{margin-bottom:14px}.mobile-right-tabs{display:flex}.tree{max-height:200px;overflow:auto}.inspector-empty{padding:20px}.right .sect{border-bottom:0}.right .sect[data-mobile="hidden"]{display:none}.control-columns{display:grid;grid-template-columns:1fr 1fr;gap:12px}.control-columns>.control-group{margin-bottom:0}.field-label{margin-bottom:6px}.num{padding:10px 5px 10px 20px;font-size:12px}.axis-label{left:7px;top:11px}.action-grid{grid-template-columns:repeat(2,1fr)}
+}
+/* v0.2.2: iPhone touch usability corrections */
+#app{position:relative}
+.file-menu{display:flex;align-items:center;gap:8px}
+.mobile-menu-btn,.mobile-bottom-nav{display:none}
+.environment-warning{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(390px,calc(100% - 32px));background:var(--panel);padding:20px 22px;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:20px;text-align:left;z-index:3;color:var(--text)}
+.environment-warning strong{font-size:18px;letter-spacing:-.02em}
+.environment-warning p{color:var(--muted);line-height:1.55;font-size:13px;margin:9px 0 0}
+@media(max-width:750px){
+  .brand{min-width:0;flex:0 0 auto}
+  .brandsub{display:none}
+  .brandname{font-size:16px}
+  .projectname{flex:1 1 0;min-width:0;width:0;max-width:none;padding:10px;font-size:13px}
+  .header-actions{flex:0 0 auto;gap:7px}
+  .header-actions .btn{font-size:14px;min-width:44px;height:44px;padding:0 10px}
+  #exportBtn{min-width:44px;order:1}
+  .mobile-menu-btn{display:inline-flex;order:2;background:var(--panel2);font-size:20px!important;font-weight:800}
+  .file-menu{display:none;position:absolute;right:10px;top:calc(100% + 10px);z-index:30;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:20px;padding:12px;width:min(340px,calc(100vw - 20px));grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  header.menu-open .file-menu{display:grid}
+  .file-menu .btn{min-width:0;width:100%;font-size:14px!important;display:flex;min-height:48px;justify-content:flex-start;padding:9px 12px;gap:8px}
+  .file-menu .btn .desktop-only{display:inline!important;font-size:13px}
+  .file-menu .btn .bicon{font-size:17px}
+  .file-menu .btn:disabled{opacity:.42}
+  .left,.right{left:10px;right:10px;bottom:78px;height:min(41dvh,350px);border-radius:22px;z-index:6}
+  .left.mobile-hidden{display:none}.right.mobile-open{display:block}
+  .tabs{display:none!important}
+  .mobile-bottom-nav{display:flex;position:absolute;left:10px;right:10px;bottom:10px;gap:7px;background:var(--panel);padding:7px;z-index:9;border-radius:18px;box-shadow:var(--shadow);border:1px solid var(--line)}
+  .mobile-bottom-nav button{background:transparent;color:var(--muted);border:1px solid transparent;min-height:50px;min-width:0;flex:1;border-radius:12px;font-size:19px;font-weight:750;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;padding:3px 4px}
+  .mobile-bottom-nav button span{font-size:11px;line-height:1.1}
+  .mobile-bottom-nav button.active{background:var(--accent-soft);color:var(--accent);border-color:rgba(91,92,226,.2)}
+  .mobile-bottom-nav button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .statpill{bottom:calc(min(41dvh,350px) + 96px)}
+  #app.panel-collapsed .statpill{bottom:82px}
+  .toast{bottom:calc(min(41dvh,350px) + 130px)}
+  #app.panel-collapsed .toast{bottom:138px}
+  .toolbar{max-width:calc(100% - 100px);overflow:auto}
+  .toolbar .tool{min-width:44px;min-height:44px;font-size:12px}
+  .view-controls{right:10px;top:14px;gap:5px}
+  #homeView{display:none}
+  .viewbtn{padding:8px;min-height:44px}
+  .stage-label{top:72px}
+  .environment-warning{top:40%}
+}
+@media(max-width:360px){.brand .logo{width:34px;height:34px}.brandname{font-size:14px}.projectname{font-size:12px}.toolbar .tool{padding:8px 5px;min-width:41px}.view-controls{top:70px;right:10px}.stage-label{top:120px}}
+
+.save-warning{position:absolute;top:105px;left:12px;right:12px;z-index:8;background:var(--danger-soft);color:var(--danger);padding:10px;border-radius:12px;font-size:12px}
+@media(max-width:750px){body{padding-top:max(10px,env(safe-area-inset-top));padding-bottom:max(10px,env(safe-area-inset-bottom))}#app{height:calc(100dvh - max(10px,env(safe-area-inset-top)) - max(10px,env(safe-area-inset-bottom)))}.control-columns{grid-template-columns:1fr}.swatch{width:40px;height:40px}}
+</style>
+</head>
+<body>
+<div id="app">
+<header>
+ <div class="brand"><div class="logo">F</div><div><div class="brandname">FORM</div><div class="brandsub">Low-poly studio · v0.2.2</div></div></div>
+ <input id="projectName" class="projectname" type="text" value="Untitled Project" maxlength="80" aria-label="Project name" title="Project name">
+ <div class="header-actions">
+  <span class="saved" id="saveStatus">Saved</span>
+  <div class="file-menu" id="fileMenu">
+  <button id="undoBtn" class="btn small" title="Undo (Ctrl/Cmd+Z)"><span class="bicon">↶</span> <span class="desktop-only">Undo</span></button>
+  <button id="redoBtn" class="btn small" title="Redo (Ctrl/Cmd+Shift+Z)"><span class="bicon">↷</span> <span class="desktop-only">Redo</span></button>
+  <button id="newBtn" class="btn small" title="New project"><span class="bicon">＋</span> <span class="desktop-only">New</span></button>
+  <button id="openBtn" class="btn small" title="Open JSON project"><span class="bicon">📂</span> <span class="desktop-only">Open</span></button>
+  <button id="saveBtn" class="btn small" title="Download editable JSON project"><span class="bicon">↓</span> <span class="desktop-only">Save</span></button>
+  </div>
+  <button id="exportBtn" class="btn primary" title="Export 3D model as GLB" aria-label="Export 3D model as GLB"><span class="bicon">⬡</span> <span class="desktop-only">Export</span></button>
+  <button id="mobileMenuBtn" class="btn mobile-menu-btn" type="button" aria-label="More project actions" aria-expanded="false" aria-controls="fileMenu">☰</button>
+ </div>
+</header>
+<aside class="side left" id="leftPanel">
+ <div class="tabs"><button id="tabShapes" class="active">Shapes</button><button id="tabObjects">Objects</button><button id="tabEdit">Edit</button></div>
+ <section class="sect" id="shapesSection"><div class="sect-title">01 · Add geometry <span>＋</span></div>
+  <div class="shape-grid" id="shapeGrid">
+   <button class="shape" data-add="cube" title="Add cube"><svg viewBox="0 0 48 48" fill="none" stroke="#e4b186" stroke-width="1.5"><path d="M9 13 23 6 39 13 25 21Z M9 13V32L25 41V21 M39 13V32L25 41"/></svg><span>Cube</span></button>
+   <button class="shape" data-add="cylinder" title="Add cylinder"><svg viewBox="0 0 48 48" fill="none" stroke="#e4b186" stroke-width="1.5"><ellipse cx="24" cy="12" rx="14" ry="7"/><path d="M10 12V34C10 43 38 43 38 34V12 M10 34C10 43 38 43 38 34"/></svg><span>Cylinder</span></button>
+   <button class="shape" data-add="cone" title="Add cone"><svg viewBox="0 0 48 48" fill="none" stroke="#e4b186" stroke-width="1.5"><path d="M24 5 9 35 M24 5 39 35"/><ellipse cx="24" cy="35" rx="15" ry="7"/></svg><span>Cone</span></button>
+   <button class="shape" data-add="sphere" title="Add low-poly sphere"><svg viewBox="0 0 48 48" fill="none" stroke="#e4b186" stroke-width="1.5"><path d="M24 4 8 16 11 35 24 44 39 35 41 16Z M8 16 24 22 41 16 M24 4 24 22 24 44 M11 35 24 22 39 35"/></svg><span>Icosphere</span></button>
+   <button class="shape" data-add="roof" title="Add roof prism"><svg viewBox="0 0 48 48" fill="none" stroke="#e4b186" stroke-width="1.5"><path d="M5 22 20 7 34 22V40H5Z M20 7 43 17 34 22 M43 17V33L34 40 M5 22 20 7"/></svg><span>Roof</span></button>
+   <button class="shape" data-add="pyramid" title="Add pyramid"><svg viewBox="0 0 48 48" fill="none" stroke="#e4b186" stroke-width="1.5"><path d="M24 5 6 33 23 43 43 33Z M24 5 23 43 M6 33 43 33"/></svg><span>Pyramid</span></button>
+   <button class="shape" data-add="plane" title="Add flat plane"><svg viewBox="0 0 48 48" fill="none" stroke="#e4b186" stroke-width="1.5"><path d="M5 23 28 11 43 25 20 39Z M5 23 20 39"/></svg><span>Plane</span></button>
+   <button class="shape" data-add="rock" title="Add irregular rock"><svg viewBox="0 0 48 48" fill="none" stroke="#e4b186" stroke-width="1.5"><path d="M7 31 14 12 32 7 43 21 35 39 15 41Z M14 12 26 23 43 21 M26 23 35 39 M26 23 15 41 M7 31 26 23"/></svg><span>Rock</span></button>
+   <button class="shape" data-add="torus" title="Add low-poly torus"><svg viewBox="0 0 48 48" fill="none" stroke="#e4b186" stroke-width="1.5"><ellipse cx="24" cy="24" rx="20" ry="16"/><ellipse cx="24" cy="24" rx="9" ry="6"/><path d="M7 17 15 21 M41 17 33 21 M7 31 15 27 M41 31 33 27"/></svg><span>Torus</span></button>
+  </div>
+  <p class="subhint">Add multiple shapes to make one game-ready asset. Exported GLB preserves separate named parts.</p>
+ </section>
+ <section class="sect" id="objectsSection"><div class="sect-title">02 · Scene objects <span id="objectCount">0</span></div><div class="tree" id="tree"></div></section>
+ <section class="sect desktop-only"><div class="sect-title">Tips</div><div class="subhint"><span class="kbd">W</span> Move &nbsp;<span class="kbd">E</span> Rotate &nbsp;<span class="kbd">R</span> Scale<br><span class="kbd">Del</span> Delete &nbsp;<span class="kbd">F</span> Focus<br><br>Drag an object to edit it. Drag empty space to orbit. Mouse wheel or pinch to zoom. Right-drag to orbit anytime.</div></section>
+</aside>
+<main class="stage" id="stage"><canvas id="viewport" aria-label="Interactive 3D modeling viewport"></canvas>
+ <div class="toolbar" role="toolbar" aria-label="Transform tools"><button class="btn tool active" data-mode="move" title="Move (W)">↔ Move <kbd>W</kbd></button><button class="btn tool" data-mode="rotate" title="Rotate (E)">⟳ Rotate <kbd>E</kbd></button><button class="btn tool" data-mode="scale" title="Scale (R)">⤢ Scale <kbd>R</kbd></button></div>
+ <div class="view-controls"><button class="viewbtn" id="homeView" title="Home view">⌂ View</button><button class="viewbtn" id="focusView" title="Focus selection (F)">◎ Focus</button></div>
+ <div id="saveWarning" class="save-warning hide" role="alert">Autosave unavailable. Use More → Save to download a backup.</div>
+ <div class="stage-label" id="stageLabel">PERSPECTIVE / SOLID</div>
+ <div id="bootNotice" class="environment-warning"><strong>Open FORM as a website</strong><p>This file preview cannot launch the editor. Host index.html on Cloudflare Pages and open the HTTPS link in Safari.</p></div>
+ <div id="gpuWarning" class="environment-warning hide" role="alert"><strong>3D viewport unavailable</strong><p>The browser did not provide WebGL2. Open the hosted site directly in Safari and turn off content-blocking or private web preview features if necessary.</p></div><div class="statpill" id="statusPill">0 objects · Grid 0.25</div><div class="help">Drag object to edit · Drag empty space to orbit<br>Wheel / pinch to zoom · Right-drag to orbit</div><div class="toast" id="toast"></div>
+ <nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Workspace controls">
+  <button type="button" data-pane="shapes" class="active">＋<span>Add</span></button>
+  <button type="button" data-pane="objects">▤<span>Objects</span></button>
+  <button type="button" data-pane="edit">✎<span>Edit</span></button>
+  <button type="button" data-pane="canvas">▣<span>Canvas</span></button>
+ </nav>
+</main>
+<aside class="side right" id="rightPanel">
+ <div class="tabs mobile-right-tabs"><button id="editShapes">Shapes</button><button id="editObjects">Objects</button><button id="editEdit" class="active">Edit</button></div>
+ <div id="inspector"></div>
+ <section class="sect" id="settingsSection"><div class="sect-title">Workspace</div>
+  <label class="toggle-row">Snap transforms <input id="snapToggle" type="checkbox" checked></label>
+  <label class="toggle-row">Snap increment <select class="step-select" id="snapStep"><option value="0.1">0.1</option><option value="0.25" selected>0.25</option><option value="0.5">0.5</option><option value="1">1</option></select></label>
+  <label class="toggle-row">Show grid <input id="gridToggle" type="checkbox" checked></label>
+  <div class="divider"></div><div class="hint">FORM autosaves locally in this browser. Download JSON for an editable project, or GLB for your game engine.</div>
+ </section>
+</aside>
+</div>
+<input type="file" id="fileInput" accept=".json,application/json">
+<div class="modal-backdrop" id="modalBackdrop"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">New project</h2><p id="modalText">Choose a starting point. Starting a new project replaces the browser autosave. Download your current project as JSON to keep it.</p><div id="modalOptions"></div><div class="modal-actions"><button class="btn" id="modalCancel">Cancel</button></div></div></div>
+<script>
+'use strict';
+// FORM Low-poly Studio v0.2.2. Dependency-free WebGL2. Native project schema described in README.md.
+const $=id=>document.getElementById(id), clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),rad=d=>d*Math.PI/180,deg=r=>r*180/Math.PI;
+const colors=['#bb835b','#d4b08b','#7e9d83','#7a93ae','#c8b978','#7d7e85','#a66e66','#e1d8bc','#465e70','#394d3b'];
+const defaultSettings=()=>({snap:true,snapStep:.25,grid:true});
+let project={version:1,name:'Camp Workshop',objects:[],settings:defaultSettings()},selected=null,mode='move',nextId=1,undoStack=[],redoStack=[],gesture=null,toastTimer=null;
+let camera={yaw:.73,elev:.45,radius:12,target:[0,1,0]};
+const stateKey='form.lowpoly.studio.v1';
+function vadd(a,b){return a.map((v,i)=>v+b[i])}function vsub(a,b){return a.map((v,i)=>v-b[i])}function vmul(a,t){return a.map(v=>v*t)}function dot(a,b){return a.reduce((s,v,i)=>s+v*b[i],0)}function cross(a,b){return[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]]}function len(a){return Math.hypot(...a)}function norm(a){return vmul(a,1/(len(a)||1))}
+function ident(){return[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]}
+function mm(a,b){let o=Array(16).fill(0);for(let c=0;c<4;c++)for(let r=0;r<4;r++)for(let k=0;k<4;k++)o[c*4+r]+=a[k*4+r]*b[c*4+k];return o}
+function tr(t){let m=ident();m[12]=t[0];m[13]=t[1];m[14]=t[2];return m}
+function sc(t){let m=ident();m[0]=t[0];m[5]=t[1];m[10]=t[2];return m}
+function rx(a){let c=Math.cos(a),s=Math.sin(a);return[1,0,0,0,0,c,s,0,0,-s,c,0,0,0,0,1]}
+function ry(a){let c=Math.cos(a),s=Math.sin(a);return[c,0,-s,0,0,1,0,0,s,0,c,0,0,0,0,1]}
+function rz(a){let c=Math.cos(a),s=Math.sin(a);return[c,s,0,0,-s,c,0,0,0,0,1,0,0,0,0,1]}
+function model(o){return mm(mm(mm(mm(tr(o.position),rz(o.rotation[2])),ry(o.rotation[1])),rx(o.rotation[0])),sc(o.scale))}
+function transformPoint(m,p){return[m[0]*p[0]+m[4]*p[1]+m[8]*p[2]+m[12],m[1]*p[0]+m[5]*p[1]+m[9]*p[2]+m[13],m[2]*p[0]+m[6]*p[1]+m[10]*p[2]+m[14]]}
+function perspective(fovy,asp,n,f){let q=1/Math.tan(fovy/2);return[q/asp,0,0,0,0,q,0,0,0,0,(f+n)/(n-f),-1,0,0,2*f*n/(n-f),0]}
+function lookAt(eye,target){let z=norm(vsub(eye,target)),x=norm(cross([0,1,0],z)),y=cross(z,x);return[x[0],y[0],z[0],0,x[1],y[1],z[1],0,x[2],y[2],z[2],0,-dot(x,eye),-dot(y,eye),-dot(z,eye),1]}
+function eye(){let{yaw,elev,radius,target:t}=camera;return[t[0]+radius*Math.cos(elev)*Math.sin(yaw),t[1]+radius*Math.sin(elev),t[2]+radius*Math.cos(elev)*Math.cos(yaw)]}
+function normalMat(m){let a=m[0],b=m[4],c=m[8],d=m[1],e=m[5],f=m[9],g=m[2],h=m[6],i=m[10];let A=e*i-f*h,B=c*h-b*i,C=b*f-c*e,D=f*g-d*i,E=a*i-c*g,F=c*d-a*f,G=d*h-e*g,H=b*g-a*h,I=a*e-b*d;let det=a*A+b*D+c*G;if(Math.abs(det)<1e-9)return[1,0,0,0,1,0,0,0,1];let q=1/det;return[A*q,B*q,C*q,D*q,E*q,F*q,G*q,H*q,I*q]}
+function makeGeometry(kind){
+ let v=[],faces=[];const add=(p)=>{v.push(p);return v.length-1};
+ if(kind==='cube'){v=[[-.5,-.5,-.5],[.5,-.5,-.5],[.5,.5,-.5],[-.5,.5,-.5],[-.5,-.5,.5],[.5,-.5,.5],[.5,.5,.5],[-.5,.5,.5]];faces=[[0,3,2,1],[4,5,6,7],[0,4,7,3],[1,2,6,5],[3,7,6,2],[0,1,5,4]]}
+ else if(kind==='roof'){v=[[-.5,-.5,-.5],[.5,-.5,-.5],[0,.5,-.5],[-.5,-.5,.5],[.5,-.5,.5],[0,.5,.5]];faces=[[0,2,1],[3,4,5],[0,3,5,2],[1,2,5,4],[0,1,4,3]]}
+ else if(kind==='pyramid'){v=[[-.5,-.5,-.5],[.5,-.5,-.5],[.5,-.5,.5],[-.5,-.5,.5],[0,.5,0]];faces=[[0,3,2,1],[0,1,4],[1,2,4],[2,3,4],[3,0,4]]}
+ else if(kind==='plane'){v=[[-.5,0,-.5],[-.5,0,.5],[.5,0,.5],[.5,0,-.5]];faces=[[0,1,2,3]]}
+ else if(kind==='cylinder'||kind==='cone'){let n=12;for(let j=0;j<n;j++){let a=j/n*Math.PI*2;add([Math.cos(a)*.5,-.5,Math.sin(a)*.5]);if(kind==='cylinder')add([Math.cos(a)*.5,.5,Math.sin(a)*.5])}if(kind==='cone'){let top=add([0,.5,0]);for(let j=0;j<n;j++)faces.push([j,top,(j+1)%n]);faces.push([...Array(n).keys()])}else{for(let j=0;j<n;j++){let k=(j+1)%n;faces.push([2*j,2*j+1,2*k+1,2*k])}faces.push([...Array(n).keys()].map(i=>i*2));faces.push([...Array(n).keys()].reverse().map(i=>i*2+1))}}
+ else if(kind==='sphere'||kind==='rock'){
+ let t=(1+Math.sqrt(5))/2;let points=[[-1,t,0],[1,t,0],[-1,-t,0],[1,-t,0],[0,-1,t],[0,1,t],[0,-1,-t],[0,1,-t],[t,0,-1],[t,0,1],[-t,0,-1],[-t,0,1]];
+ v=points.map((p,i)=>{let r=kind==='rock'?(0.42+[.08,-.04,.07,-.06,.03,-.05,.06,-.02,.04,-.08,.06,0][i]):.5;return vmul(norm(p),r)});
+ faces=[[0,11,5],[0,5,1],[0,1,7],[0,7,10],[0,10,11],[1,5,9],[5,11,4],[11,10,2],[10,7,6],[7,1,8],[3,9,4],[3,4,2],[3,2,6],[3,6,8],[3,8,9],[4,9,5],[2,4,11],[6,2,10],[8,6,7],[9,8,1]];
+ }
+ else if(kind==='torus'){let major=16,minor=7;for(let i=0;i<major;i++)for(let j=0;j<minor;j++){let a=i/major*Math.PI*2,b=j/minor*Math.PI*2,rr=.36+.14*Math.cos(b);add([rr*Math.cos(a),.14*Math.sin(b),rr*Math.sin(a)])}for(let i=0;i<major;i++)for(let j=0;j<minor;j++){let p=i*minor+j,q=((i+1)%major)*minor+j,r=((i+1)%major)*minor+(j+1)%minor,s=i*minor+(j+1)%minor;faces.push([p,q,r,s])}}
+ // Correct winding automatically against a center point for closed convex primitive faces; torus has locally directed faces.
+ if(kind==='sphere'||kind==='rock'||kind==='pyramid'){for(let f of faces){let n=cross(vsub(v[f[1]],v[f[0]]),vsub(v[f[2]],v[f[0]]));if(dot(n,v[f[0]])<0)f.reverse()}}
+ if(kind==='torus'){for(let f of faces){let p=v[f[0]],n=cross(vsub(v[f[1]],p),vsub(v[f[2]],p));let angle=Math.atan2(p[2],p[0]),center=[.36*Math.cos(angle),0,.36*Math.sin(angle)];if(dot(n,vsub(p,center))<0)f.reverse()}}
+ let positions=[],normals=[],edges=[],edgeSet=new Set();
+ for(let face of faces){let a=v[face[0]],b=v[face[1]],c=v[face[2]];let n=norm(cross(vsub(b,a),vsub(c,a)));for(let k=1;k<face.length-1;k++)for(let idx of [face[0],face[k],face[k+1]]){positions.push(...v[idx]);normals.push(...n)}for(let k=0;k<face.length;k++){let u=face[k],w=face[(k+1)%face.length],key=[u,w].sort((x,y)=>x-y).join(':');if(!edgeSet.has(key)){edgeSet.add(key);edges.push(...v[u],...v[w])}}}
+ return{positions:new Float32Array(positions),normals:new Float32Array(normals),edges:new Float32Array(edges),triangles:positions.length/3};
+}
+const geometries={};for(let k of ['cube','cylinder','cone','sphere','roof','pyramid','plane','rock','torus'])geometries[k]=makeGeometry(k);
+const canvas=$('viewport');let gl=null;try{gl=canvas.getContext('webgl2',{antialias:true,alpha:false,depth:true,stencil:false})}catch(e){console.warn('WebGL2 cannot start in this viewer:',e)}
+let viewportReady=!!gl,program=null,lineProgram=null,geoGL={},gridBuffer=null,axisBuffer=null,outlineBuffer=null,gridCount=0,canvasW=1,canvasH=1;
+function shader(type,source){let s=gl.createShader(type);gl.shaderSource(s,source);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(s));return s}
+function prog(v,f){let p=gl.createProgram();gl.attachShader(p,shader(gl.VERTEX_SHADER,v));gl.attachShader(p,shader(gl.FRAGMENT_SHADER,f));gl.linkProgram(p);if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(p));return p}
+const sv=`#version 300 es\nprecision highp float;layout(location=0) in vec3 aPos;layout(location=1) in vec3 aNormal;uniform mat4 uMVP;uniform mat4 uModel;uniform mat3 uNormal;out vec3 vNormal;out vec3 vWorld;void main(){vec4 w=uModel*vec4(aPos,1.0);vWorld=w.xyz;vNormal=normalize(uNormal*aNormal);gl_Position=uMVP*vec4(aPos,1.0);}`;
+const sf=`#version 300 es\nprecision highp float;in vec3 vNormal;in vec3 vWorld;uniform vec3 uBase;uniform int uMode;out vec4 frag;void main(){if(uMode==1){frag=vec4(uBase,1.);return;}vec3 n=normalize(vNormal);float sunny=max(dot(n,normalize(vec3(.55,1.,.7))),0.);float fill=max(dot(n,normalize(vec3(-.7,.3,-.3))),0.);float light=.52+.37*sunny+.12*fill;vec3 col=uBase*light;col=pow(col,vec3(.93));frag=vec4(col,1.);}`;
+const lv=`#version 300 es\nprecision highp float;layout(location=0) in vec3 aPos;uniform mat4 uMVP;void main(){gl_Position=uMVP*vec4(aPos,1.0);}`;
+const lf=`#version 300 es\nprecision highp float;uniform vec4 uColor;out vec4 frag;void main(){frag=uColor;}`;
+function gpuBuffer(data){let b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,data,gl.STATIC_DRAW);return b}
+function setupGL(){if(!gl){$('stageLabel').textContent='WEBGL2 NOT AVAILABLE';$('gpuWarning').classList.remove('hide');toast('3D rendering unavailable in this viewer');return}
+ try{program=prog(sv,sf);lineProgram=prog(lv,lf);for(let[k,g]of Object.entries(geometries)){geoGL[k]={pos:gpuBuffer(g.positions),norm:gpuBuffer(g.normals),edges:gpuBuffer(g.edges),n:g.positions.length/3,e:g.edges.length/3}}
+ let g=[];for(let i=-20;i<=20;i++){g.push(i,-.003,-20,i,-.003,20,-20,-.003,i,20,-.003,i)}gridBuffer=gpuBuffer(new Float32Array(g));gridCount=g.length/3;
+ axisBuffer=gpuBuffer(new Float32Array([-20,-.001,0,20,-.001,0,0,-.001,-20,0,-.001,20]));
+ let box=[[-.5,-.5,-.5],[.5,-.5,-.5],[.5,.5,-.5],[-.5,.5,-.5],[-.5,-.5,.5],[.5,-.5,.5],[.5,.5,.5],[-.5,.5,.5]],pairs=[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]],o=[];for(let[a,b]of pairs)o.push(...box[a],...box[b]);outlineBuffer=gpuBuffer(new Float32Array(o));
+ gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);gl.disable(gl.CULL_FACE);gl.clearColor(.08,.105,.14,1);viewportReady=true;
+ }catch(e){viewportReady=false;console.error(e);$('stageLabel').textContent='RENDERER ERROR';$('gpuWarning').classList.remove('hide');toast('3D renderer could not start')} }
+function parseColor(h){return[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)/255)}
+function resize(){if(!gl)return;let rect=canvas.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);let w=Math.max(2,Math.round(rect.width*dpr)),h=Math.max(2,Math.round(rect.height*dpr));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h}canvasW=w;canvasH=h;gl.viewport(0,0,w,h)}
+function viewProj(){let e=eye(),p=perspective(rad(50),canvasW/canvasH,.05,500),v=lookAt(e,camera.target);return mm(p,v)}
+function attrib(buf,loc){gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,3,gl.FLOAT,false,0,0)}
+function drawLines(buf,n,mvp,color){gl.useProgram(lineProgram);attrib(buf,0);gl.uniformMatrix4fv(gl.getUniformLocation(lineProgram,'uMVP'),false,new Float32Array(mvp));gl.uniform4fv(gl.getUniformLocation(lineProgram,'uColor'),new Float32Array(color));gl.drawArrays(gl.LINES,0,n)}
+function render(picking=false){if(!viewportReady)return;resize();let pv=viewProj();gl.viewport(0,0,canvasW,canvasH);gl.clearColor(...(picking?[0,0,0,1]:[.08,.105,.14,1]));gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.disable(gl.BLEND);gl.disable(gl.DITHER);
+ if(!picking&&project.settings.grid){drawLines(gridBuffer,gridCount,pv,[.33,.40,.47,.33]);drawLines(axisBuffer,2,pv,[.60,.24,.25,.7]); // X axis
+ // Z axis, separate segment using offset in original buffer
+ gl.useProgram(lineProgram);attrib(axisBuffer,0);gl.uniformMatrix4fv(gl.getUniformLocation(lineProgram,'uMVP'),false,new Float32Array(pv));gl.uniform4fv(gl.getUniformLocation(lineProgram,'uColor'),new Float32Array([.26,.42,.64,.8]));gl.drawArrays(gl.LINES,2,2);
+ }
+ gl.useProgram(program);
+ let loc={mvp:gl.getUniformLocation(program,'uMVP'),model:gl.getUniformLocation(program,'uModel'),normal:gl.getUniformLocation(program,'uNormal'),base:gl.getUniformLocation(program,'uBase'),mode:gl.getUniformLocation(program,'uMode')};
+ for(let o of project.objects){if(o.visible===false)continue;let g=geoGL[o.type];if(!g)continue;let mat=model(o),mvp=mm(pv,mat);attrib(g.pos,0);attrib(g.norm,1);gl.uniformMatrix4fv(loc.mvp,false,new Float32Array(mvp));gl.uniformMatrix4fv(loc.model,false,new Float32Array(mat));gl.uniformMatrix3fv(loc.normal,false,new Float32Array(normalMat(mat)));gl.uniform3fv(loc.base,new Float32Array(picking?[o.id&255,(o.id>>8)&255,(o.id>>16)&255].map(v=>v/255):parseColor(o.color)));gl.uniform1i(loc.mode,picking?1:0);gl.drawArrays(gl.TRIANGLES,0,g.n);
+ if(!picking&&o.id===selected){gl.disable(gl.DEPTH_TEST);drawLines(g.edges,g.e,mvp,[.99,.76,.42,.7]);drawLines(outlineBuffer,24,mvp,[1,.86,.58,.8]);gl.enable(gl.DEPTH_TEST);gl.useProgram(program)}
+ }
+ }
+let dirty=true;function invalidate(){dirty=true}function frame(){if(dirty){render(false);dirty=false}requestAnimationFrame(frame)}
+function status(){let n=project.objects.length;$('objectCount').textContent=n;$('statusPill').textContent=n+' object'+(n===1?'':'s')+' · Grid '+project.settings.snapStep;$('undoBtn').disabled=!undoStack.length;$('redoBtn').disabled=!redoStack.length}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function toast(msg){let el=$('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2700)}
+function persist(){try{localStorage.setItem(stateKey,JSON.stringify({project,camera}));$('saveStatus').textContent='Saved';$('saveWarning').classList.add('hide')}catch(e){$('saveStatus').textContent='Local save off';$('saveWarning').classList.remove('hide')}status();invalidate()}
+function snapshot(){return JSON.stringify(project)}
+function history(before){if(before===snapshot())return;undoStack.push(before);if(undoStack.length>100)undoStack.shift();redoStack=[];persist()}
+function commit(fn){settleGesture();let before=snapshot();fn();history(before);ui()}
+function undo(){settleGesture();if(!undoStack.length)return;redoStack.push(snapshot());project=JSON.parse(undoStack.pop());selected=project.objects.some(o=>o.id===selected)?selected:null;persist();ui()}
+function redo(){settleGesture();if(!redoStack.length)return;undoStack.push(snapshot());project=JSON.parse(redoStack.pop());selected=project.objects.some(o=>o.id===selected)?selected:null;persist();ui()}
+function objectById(id){return project.objects.find(o=>o.id===id)}
+function select(id){selected=id!=null&&objectById(id)?id:null;ui();invalidate()}
+function allocateId(){const used=new Set(project.objects.map(o=>o.id));while(used.has(nextId)&&nextId<=0xffffff)nextId++;if(nextId>0xffffff){nextId=1;while(used.has(nextId))nextId++}return nextId++}
+function added(type,name,pos,scale,color){let o={id:allocateId(),name:name||type[0].toUpperCase()+type.slice(1),type,position:pos||[0,.5,0],rotation:[0,0,0],scale:scale||[1,1,1],color:color||colors[0],visible:true};project.objects.push(o);return o}
+function addShape(type){commit(()=>{let o=added(type,undefined,[camera.target[0],.6,camera.target[2]],undefined,colors[project.objects.length%colors.length]);if(type==='plane')o.position[1]=.05;if(type==='rock')o.scale=[1.3,.9,1.2];selected=o.id});if(window.innerWidth<=750)mobileTab('edit');toast(type+' added')}
+function seedScene(){project.objects=[];nextId=1;let a;
+ a=added('cube','Cabin walls',[0,.8,0],[2.7,1.6,2.3],'#c69b70');
+ a=added('roof','Timber roof',[0,1.92,0],[3.3,1.05,2.8],'#704c3d');
+ a=added('cube','Front door',[0,.68,1.17],[.63,1.32,.10],'#69523d');
+ a=added('cube','Left window',[-.92,1.07,1.17],[.55,.55,.10],'#8ca8b7');
+ a=added('cube','Right window',[.92,1.07,1.17],[.55,.55,.10],'#8ca8b7');
+ a=added('cylinder','Pine trunk',[-2.95,.72,-1.2],[.36,1.45,.36],'#7e5a40');
+ a=added('cone','Pine foliage',[-2.95,2.0,-1.2],[1.65,2.35,1.65],'#4d8063');
+ a=added('cone','Pine crown',[-2.95,2.85,-1.2],[1.22,1.70,1.22],'#537d5c');
+ a=added('rock','Granite rock',[2.4,.3,1.7],[1.3,.65,1.1],'#8c929a');
+ a=added('rock','Small rock',[3.0,.16,1.1],[.7,.38,.6],'#78818a');
+ selected=null;camera={yaw:.75,elev:.43,radius:12,target:[0,1,0]};}
+function newProject(useSample){settleGesture();project={version:1,name:useSample?'Camp Workshop':'Untitled Project',objects:[],settings:defaultSettings()};nextId=1;selected=null;undoStack=[];redoStack=[];camera={yaw:.75,elev:.43,radius:12,target:[0,1,0]};if(useSample)seedScene();persist();ui();toast(useSample?'Starter scene loaded':'Blank project created')}
+function ui(){uiTree();uiInspector();$('projectName').value=project.name;$('snapToggle').checked=!!project.settings.snap;$('snapStep').value=String(project.settings.snapStep);$('gridToggle').checked=!!project.settings.grid;document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));status();invalidate()}
+function uiTree(){let tree=$('tree');tree.innerHTML=project.objects.length?'':'<div class="tree-empty">No objects yet. Add a shape above to begin.</div>';for(let o of project.objects){let r=document.createElement('div');r.className='tree-row'+(selected===o.id?' selected':'');r.dataset.id=o.id;r.innerHTML=`<span class="dot" style="background:${esc(o.color)}"></span><span class="name" title="${esc(o.name)}">${esc(o.name)}</span><span class="type">${esc(o.type)}</span><button class="eye" data-eye="${o.id}" title="Toggle visibility">${o.visible?'◉':'○'}</button>`;tree.appendChild(r)}}
+function trip(prop,vals){let labels=['x','y','z'];return `<div class="triple">${labels.map((l,i)=>`<div class="axis-wrap"><span class="axis-label ${l}">${l.toUpperCase()}</span><input class="num" type="number" step="0.1" data-prop="${prop}" data-axis="${i}" value="${Number(vals[i]).toFixed(2)}" aria-label="${prop} ${l}"></div>`).join('')}</div>`}
+function uiInspector(){let el=$('inspector'),o=objectById(selected);if(!o){el.innerHTML='<div class="inspector-empty"><div class="empty-symbol">◇</div><strong>No object selected</strong>Choose an object from the scene or tap one in the viewport to edit its transforms, material, and actions.</div>';return}
+ el.innerHTML=`<section class="sect"><div class="sect-title">03 · Selected object <span>${esc(o.type)}</span></div><div class="control-group"><div class="field-label">Name</div><input id="objectName" class="text-field" maxlength="100" value="${esc(o.name)}"></div>
+ <div class="control-columns"><div class="control-group"><div class="field-label">Position <span>units</span></div>${trip('position',o.position)}</div><div class="control-group"><div class="field-label">Rotation <span>degrees</span></div>${trip('rotation',o.rotation.map(deg))}</div></div>
+ <div class="control-group"><div class="field-label">Scale <span>units</span></div>${trip('scale',o.scale)}</div>
+ <div class="control-group"><div class="field-label">Flat-shaded material</div><div class="palette">${colors.map(c=>`<button class="swatch ${c===o.color?'selected':''}" data-color="${c}" style="background:${c}" title="${c}"></button>`).join('')}</div><label class="colorfield"><input type="color" id="customColor" value="${o.color}"><span>Custom color</span></label></div>
+ <div class="action-grid"><button class="btn small" data-action="duplicate">⧉ Duplicate</button><button class="btn small" data-action="floor">↓ To ground</button><button class="btn small" data-action="rename">✎ Rename</button><button class="btn small" data-action="delete">✕ Delete</button></div></section>`}
+function duplicate(){let o=objectById(selected);if(!o)return;commit(()=>{let copy=structuredClone(o);copy.id=allocateId();copy.name=o.name+' Copy';copy.position[0]+=.6;copy.position[2]+=.6;project.objects.push(copy);selected=copy.id});toast('Object duplicated')}
+function del(){if(!objectById(selected))return;commit(()=>{project.objects=project.objects.filter(o=>o.id!==selected);selected=null});toast('Object deleted')}
+function floor(){let o=objectById(selected);if(!o)return;commit(()=>{let g=geometries[o.type],m=model(o),bottom=Infinity;for(let i=0;i<g.positions.length;i+=3)bottom=Math.min(bottom,transformPoint(m,g.positions.subarray(i,i+3))[1]);o.position[1]-=bottom});toast('Placed on ground')}
+function switchMode(m){settleGesture();mode=m;ui();toast(m[0].toUpperCase()+m.slice(1)+' mode')}
+function focus(){let o=objectById(selected);if(!o){camera.target=[0,.8,0];camera.radius=12}else{camera.target=o.position.slice();camera.radius=clamp(Math.max(...o.scale)*5,3,25)}invalidate();saveCameraSoon()}
+function snap(v){let s=project.settings;return s.snap?Math.round(v/s.snapStep)*s.snapStep:v}
+function pointerRay(clientX,clientY){let b=canvas.getBoundingClientRect(),x=((clientX-b.left)/b.width*2-1),y=(1-(clientY-b.top)/b.height*2),t=Math.tan(rad(50)/2),e=eye(),forward=norm(vsub(camera.target,e)),right=norm(cross(forward,[0,1,0])),up=norm(cross(right,forward));return{origin:e,dir:norm(vadd(forward,vadd(vmul(right,x*b.width/b.height*t),vmul(up,y*t))))}}
+function rayPlane(x,y,height){let r=pointerRay(x,y);if(Math.abs(r.dir[1])<.008)return null;let d=(height-r.origin[1])/r.dir[1];if(d<0)return null;return vadd(r.origin,vmul(r.dir,d))}
+function pick(clientX,clientY){if(!viewportReady)return null;render(true);let rect=canvas.getBoundingClientRect(),px=Math.floor((clientX-rect.left)/rect.width*canvasW),py=Math.floor((rect.bottom-clientY)/rect.height*canvasH),buf=new Uint8Array(4);gl.readPixels(clamp(px,0,canvasW-1),clamp(py,0,canvasH-1),1,1,gl.RGBA,gl.UNSIGNED_BYTE,buf);let id=buf[0]+(buf[1]<<8)+(buf[2]<<16);invalidate();return objectById(id)?id:null}
+const pointers=new Map();let orbitStart=null;
+canvas.addEventListener('pointerdown',ev=>{ev.preventDefault();canvas.setPointerCapture(ev.pointerId);pointers.set(ev.pointerId,{x:ev.clientX,y:ev.clientY});if(pointers.size>1){settleGesture();orbitStart={multi:true,distance:pinchDist(),radius:camera.radius,yaw:camera.yaw,elev:camera.elev};return}
+ let hit=ev.button===2||ev.button===1?null:pick(ev.clientX,ev.clientY),o=objectById(hit);if(o){if(selected!==hit)select(hit);let plane=rayPlane(ev.clientX,ev.clientY,o.position[1]);gesture={id:hit,pointerId:ev.pointerId,startX:ev.clientX,startY:ev.clientY,initial:structuredClone(o),mode,before:snapshot(),offset:plane?[o.position[0]-plane[0],o.position[2]-plane[2]]:[0,0],changed:false};orbitStart=null}
+ else{select(null);gesture=null;orbitStart={x:ev.clientX,y:ev.clientY,yaw:camera.yaw,elev:camera.elev,target:camera.target.slice(),pan:ev.shiftKey||ev.button===1};}canvas.classList.add('dragging');});
+function pinchDist(){let p=[...pointers.values()];return p.length<2?1:Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y)}
+canvas.addEventListener('pointermove',ev=>{if(!pointers.has(ev.pointerId))return;let old=pointers.get(ev.pointerId);pointers.set(ev.pointerId,{x:ev.clientX,y:ev.clientY});if(pointers.size>1){if(!orbitStart||!orbitStart.multi){orbitStart={multi:true,distance:pinchDist(),radius:camera.radius,yaw:camera.yaw,elev:camera.elev}}camera.radius=clamp(orbitStart.radius*orbitStart.distance/pinchDist(),1.3,90);camera.yaw+=(ev.clientX-old.x)*.002;camera.elev=clamp(camera.elev-(ev.clientY-old.y)*.002,-1.25,1.35);invalidate();return}
+ if(gesture&&gesture.pointerId===ev.pointerId){let o=objectById(gesture.id);if(!o)return;let dx=ev.clientX-gesture.startX,dy=ev.clientY-gesture.startY;if(Math.abs(dx)+Math.abs(dy)<6)return;gesture.changed=true;
+ if(gesture.mode==='move'){let p=rayPlane(ev.clientX,ev.clientY,gesture.initial.position[1]);if(p){o.position[0]=snap(p[0]+gesture.offset[0]);o.position[2]=snap(p[2]+gesture.offset[1])}}
+ else if(gesture.mode==='rotate'){let angle=gesture.initial.rotation[1]+dx*.012;o.rotation[1]=project.settings.snap?Math.round(angle/rad(15))*rad(15):angle}
+ else if(gesture.mode==='scale'){let factor=Math.exp(-dy*.008);for(let i=0;i<3;i++)o.scale[i]=clamp(project.settings.snap?Math.max(.05,Math.round(gesture.initial.scale[i]*factor/project.settings.snapStep)*project.settings.snapStep):gesture.initial.scale[i]*factor,.05,200)}invalidate();return}
+ if(orbitStart&&!orbitStart.multi){let rect=canvas.getBoundingClientRect(),dx=ev.clientX-orbitStart.x,dy=ev.clientY-orbitStart.y;if(orbitStart.pan){let e=eye(),fwd=norm(vsub(camera.target,e)),right=norm(cross(fwd,[0,1,0])),up=norm(cross(right,fwd)),scale=camera.radius*.002;camera.target=vadd(orbitStart.target,vadd(vmul(right,-dx*scale),vmul(up,dy*scale)))}else{camera.yaw=orbitStart.yaw-dx*.008;camera.elev=clamp(orbitStart.elev+dy*.008,-1.25,1.35)}invalidate()}
+});
+// Each transform is one transaction, even when another finger interrupts it.
+function settleGesture(cancel=false){let current=gesture;gesture=null;if(!current)return;if(cancel){project=JSON.parse(current.before);persist();ui()}else if(current.changed){history(current.before);ui()}}
+function finishPointer(ev){if(!pointers.has(ev.pointerId))return;settleGesture(ev.type==='pointercancel');pointers.delete(ev.pointerId);orbitStart=null;if(pointers.size===0)canvas.classList.remove('dragging');persist()}
+canvas.addEventListener('pointerup',finishPointer);canvas.addEventListener('pointercancel',finishPointer);canvas.addEventListener('lostpointercapture',finishPointer);
+canvas.addEventListener('contextmenu',e=>e.preventDefault());
+let cameraSaveTimer;
+function saveCameraSoon(){clearTimeout(cameraSaveTimer);cameraSaveTimer=setTimeout(persist,250)}
+canvas.addEventListener('wheel',ev=>{ev.preventDefault();camera.radius=clamp(camera.radius*Math.exp(ev.deltaY*.0012),1.3,90);invalidate();saveCameraSoon()},{passive:false});
+window.addEventListener('blur',()=>{settleGesture();pointers.clear();orbitStart=null;canvas.classList.remove('dragging');persist()});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){settleGesture();persist()}});
+canvas.addEventListener('webglcontextlost',ev=>{ev.preventDefault();settleGesture();viewportReady=false;$('stageLabel').textContent='RESTORING 3D VIEW';$('gpuWarning').classList.remove('hide');$('gpuWarning').querySelector('p').textContent='The graphics context was interrupted. Your project is retained; waiting for the browser to restore the view.'});
+canvas.addEventListener('webglcontextrestored',()=>{setupGL();if(viewportReady){$('gpuWarning').classList.add('hide');$('stageLabel').textContent='PERSPECTIVE / SOLID';invalidate();toast('3D view restored')}});
+
+function download(name,blob){let a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),15000)}
+function safeFile(){return(project.name||'Lowpoly').trim().replace(/[^a-z0-9_\- ]/gi,'').replace(/\s+/g,'_').slice(0,55)||'Lowpoly'}
+function saveJSON(){settleGesture();let payload={...project,camera};download(safeFile()+'.form.json',new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}));toast('Editable project downloaded')}
+function validate(raw){if(!raw||raw.version!==1||!Array.isArray(raw.objects))throw Error('Not a FORM version 1 project');if(raw.objects.length>5000)throw Error('Project too large');let used=new Set();let objs=raw.objects.map((o,i)=>{if(!o||!Object.hasOwn(geometries,o.type))throw Error('Unsupported geometry at object '+(i+1));let id=Number(o.id);if(!Number.isSafeInteger(id)||id<1||id>0xffffff||used.has(id))throw Error('Invalid or duplicate object ID');used.add(id);for(let v of [o.position,o.rotation,o.scale])if(!Array.isArray(v)||v.length!==3||!v.every(x=>Number.isFinite(x)&&Math.abs(x)<=10000))throw Error('Invalid transform at object '+(i+1));if(o.scale.some(s=>s<=0||s>10000))throw Error('Invalid scale');if(!/^#[0-9a-f]{6}$/i.test(o.color))throw Error('Invalid hex color');return{id,name:String(o.name||o.type).slice(0,100),type:o.type,position:o.position.slice(),rotation:o.rotation.slice(),scale:o.scale.slice(),color:o.color,visible:o.visible!==false}});return{version:1,name:String(raw.name||'Imported Project').slice(0,80),objects:objs,settings:{snap:raw.settings?.snap!==false,snapStep:[.1,.25,.5,1].includes(raw.settings?.snapStep)?raw.settings.snapStep:.25,grid:raw.settings?.grid!==false}}}
+function validateCamera(c){if(!c||![c.yaw,c.elev,c.radius].every(Number.isFinite)||!Array.isArray(c.target)||c.target.length!==3||!c.target.every(Number.isFinite))return{yaw:.75,elev:.43,radius:12,target:[0,1,0]};return{yaw:c.yaw,elev:clamp(c.elev,-1.25,1.35),radius:clamp(c.radius,1.3,90),target:c.target.map(v=>clamp(v,-10000,10000))}}
+function loadProject(raw){let p=validate(raw);settleGesture();project=p;nextId=Math.max(1,...p.objects.map(o=>o.id))+1;undoStack=[];redoStack=[];selected=null;camera=validateCamera(raw.camera);persist();ui();toast('Project loaded')}
+function quatEuler(r){let[a,b,c]=r,sx=Math.sin(a/2),cx=Math.cos(a/2),sy=Math.sin(b/2),cy=Math.cos(b/2),sz=Math.sin(c/2),cz=Math.cos(c/2);return[sx*cy*cz-cx*sy*sz,cx*sy*cz+sx*cy*sz,cx*cy*sz-sx*sy*cz,cx*cy*cz+sx*sy*sz]}
+function exportGLB(){settleGesture();let objs=project.objects.filter(o=>o.visible!==false);if(!objs.length){toast('Add a visible object before exporting');return}try{
+ let doc={asset:{version:'2.0',generator:'FORM Low-poly Studio 0.2.2'},scene:0,scenes:[{nodes:[]}],nodes:[],meshes:[],materials:[],accessors:[],bufferViews:[],buffers:[{byteLength:0}]};let binary=[],total=0,matMap=new Map();
+ function bufferView(bytes,target){let pad=(4-total%4)%4;if(pad){binary.push(new Uint8Array(pad));total+=pad}let idx=doc.bufferViews.length;doc.bufferViews.push({buffer:0,byteOffset:total,byteLength:bytes.byteLength,target});binary.push(bytes);total+=bytes.byteLength;return idx}
+ function accessor(view,componentType,count,type,min,max){let a={bufferView:view,componentType,count,type};if(min)a.min=min;if(max)a.max=max;doc.accessors.push(a);return doc.accessors.length-1}
+ for(let o of objs){let g=geometries[o.type],mIdx=matMap.get(o.color);if(mIdx==null){mIdx=doc.materials.length;let rgb=parseColor(o.color).map(x=>x<=.04045?x/12.92:Math.pow((x+.055)/1.055,2.4));doc.materials.push({name:o.color,pbrMetallicRoughness:{baseColorFactor:[...rgb,1],metallicFactor:0,roughnessFactor:1},doubleSided:true});matMap.set(o.color,mIdx)}
+ let posBytes=new Uint8Array(g.positions.buffer.slice(0)),nrmBytes=new Uint8Array(g.normals.buffer.slice(0));let mins=[Infinity,Infinity,Infinity],maxs=[-Infinity,-Infinity,-Infinity];for(let i=0;i<g.positions.length;i+=3)for(let k=0;k<3;k++){mins[k]=Math.min(mins[k],g.positions[i+k]);maxs[k]=Math.max(maxs[k],g.positions[i+k])}
+ let pi=accessor(bufferView(posBytes,34962),5126,g.triangles,'VEC3',mins,maxs),ni=accessor(bufferView(nrmBytes,34962),5126,g.triangles,'VEC3');let meshIndex=doc.meshes.length;doc.meshes.push({name:o.name,primitives:[{attributes:{POSITION:pi,NORMAL:ni},material:mIdx,mode:4}]});let node=doc.nodes.length;doc.nodes.push({name:o.name,mesh:meshIndex,translation:o.position,rotation:quatEuler(o.rotation),scale:o.scale});doc.scenes[0].nodes.push(node)}
+ let pad=(4-total%4)%4;if(pad){binary.push(new Uint8Array(pad));total+=pad}doc.buffers[0].byteLength=total;let enc=new TextEncoder().encode(JSON.stringify(doc)),jsonLength=Math.ceil(enc.length/4)*4,binLength=total,all=new ArrayBuffer(12+8+jsonLength+8+binLength),dv=new DataView(all),u=new Uint8Array(all);dv.setUint32(0,0x46546c67,true);dv.setUint32(4,2,true);dv.setUint32(8,all.byteLength,true);dv.setUint32(12,jsonLength,true);dv.setUint32(16,0x4e4f534a,true);u.fill(32,20,20+jsonLength);u.set(enc,20);let p=20+jsonLength;dv.setUint32(p,binLength,true);dv.setUint32(p+4,0x004e4942,true);p+=8;for(let x of binary){u.set(x,p);p+=x.length}download(safeFile()+'.glb',new Blob([all],{type:'model/gltf-binary'}));toast('GLB exported · '+objs.length+' parts')
+ }catch(e){console.error(e);toast('Export failed: '+e.message)}}
+function modal(title,desc,choices){$('modalTitle').textContent=title;$('modalText').textContent=desc;let c=$('modalOptions');c.innerHTML='';for(let choice of choices){let b=document.createElement('button');b.className='modal-choice';b.innerHTML='<strong>'+esc(choice.title)+'</strong><small>'+esc(choice.description)+'</small>';b.addEventListener('click',()=>{$('modalBackdrop').classList.remove('open');choice.fn()});c.appendChild(b)}$('modalBackdrop').classList.add('open')}
+$('modalCancel').onclick=()=>$('modalBackdrop').classList.remove('open');$('modalBackdrop').addEventListener('click',e=>{if(e.target===$('modalBackdrop'))$('modalBackdrop').classList.remove('open')});
+$('newBtn').onclick=()=>modal('Start a new project','Download your current project as JSON if you want to keep a separate copy.',[{title:'Blank canvas',description:'Start from an empty scene.',fn:()=>newProject(false)},{title:'Sample cabin',description:'Explore a low-poly cabin, trees, and stones.',fn:()=>newProject(true)}]);
+$('openBtn').onclick=()=>$('fileInput').click();$('fileInput').addEventListener('change',async ev=>{let f=ev.target.files?.[0];if(!f)return;try{if(f.size>10*1024*1024)throw Error('Project exceeds the 10 MB limit');loadProject(JSON.parse(await f.text()))}catch(e){toast('Open failed: '+e.message)}ev.target.value=''});
+$('saveBtn').onclick=saveJSON;$('exportBtn').onclick=exportGLB;$('undoBtn').onclick=undo;$('redoBtn').onclick=redo;
+$('projectName').addEventListener('change',e=>commit(()=>project.name=e.target.value.trim().slice(0,80)||'Untitled Project'));
+$('shapeGrid').addEventListener('click',e=>{let b=e.target.closest('[data-add]');if(b)addShape(b.dataset.add)});
+$('tree').addEventListener('click',e=>{let eye=e.target.closest('[data-eye]');if(eye){let id=Number(eye.dataset.eye);commit(()=>{let o=objectById(id);o.visible=!o.visible});return}let r=e.target.closest('[data-id]');if(r){select(Number(r.dataset.id));if(window.innerWidth<=750)mobileTab('edit')}});
+$('inspector').addEventListener('change',e=>{let o=objectById(selected);if(!o)return;let t=e.target;if(t.id==='objectName'){commit(()=>o.name=t.value.trim().slice(0,100)||o.type);return}if(t.id==='customColor'){commit(()=>o.color=t.value);return}if(t.matches('[data-prop]')){let a=t.dataset.prop,axis=Number(t.dataset.axis),v=Number(t.value);if(!Number.isFinite(v))return;if(a==='rotation')v=rad(v);if(a==='scale')v=clamp(v,.05,10000);else v=clamp(v,-10000,10000);commit(()=>o[a][axis]=v)}});
+$('inspector').addEventListener('click',e=>{let o=objectById(selected);if(!o)return;let b=e.target.closest('[data-color]');if(b){commit(()=>o.color=b.dataset.color);return}let a=e.target.closest('[data-action]')?.dataset.action;if(a==='duplicate')duplicate();if(a==='delete')del();if(a==='floor')floor();if(a==='rename')$('objectName')?.focus()});
+document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>switchMode(b.dataset.mode)));
+$('homeView').onclick=()=>{camera={yaw:.75,elev:.43,radius:12,target:[0,1,0]};invalidate();saveCameraSoon()};$('focusView').onclick=focus;
+$('snapToggle').addEventListener('change',e=>commit(()=>project.settings.snap=e.target.checked));$('snapStep').addEventListener('change',e=>commit(()=>project.settings.snapStep=Number(e.target.value)));$('gridToggle').addEventListener('change',e=>commit(()=>project.settings.grid=e.target.checked));
+window.addEventListener('keydown',e=>{let k=e.key.toLowerCase(),typing=e.target.matches('input,textarea,select,[contenteditable]');if(k==='escape'&&gesture){e.preventDefault();settleGesture(true);return}if(typing&&k!=='s')return;if((e.metaKey||e.ctrlKey)&&k==='z'){e.preventDefault();if(e.shiftKey)redo();else undo();return}if((e.metaKey||e.ctrlKey)&&k==='y'){e.preventDefault();redo();return}if((e.metaKey||e.ctrlKey)&&k==='s'){e.preventDefault();saveJSON();return}if(typing)return;if(k==='w')switchMode('move');else if(k==='e')switchMode('rotate');else if(k==='r')switchMode('scale');else if(k==='f')focus();else if(k==='delete'||k==='backspace'){e.preventDefault();del()}else if((e.ctrlKey||e.metaKey)&&k==='d'){e.preventDefault();duplicate()}else if(k==='escape')select(null)});
+function mobileTab(which){
+ if(window.innerWidth>750)return;
+ const collapsed=which==='canvas';
+ $('app').classList.toggle('panel-collapsed',collapsed);
+ $('leftPanel').classList.toggle('mobile-hidden',collapsed||which==='edit');
+ $('rightPanel').classList.toggle('mobile-open',which==='edit');
+ $('shapesSection').style.display=which==='shapes'?'block':'none';
+ $('objectsSection').style.display=which==='objects'?'block':'none';
+ $('settingsSection').style.display=which==='edit'?'block':'none';
+ document.querySelectorAll('[data-pane]').forEach(b=>{
+  let active=b.dataset.pane===which;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));
+ });
+ resize();invalidate();
+}
+document.querySelectorAll('[data-pane]').forEach(b=>b.addEventListener('click',()=>mobileTab(b.dataset.pane)));
+function closeFileMenu(){document.querySelector('header').classList.remove('menu-open');$('mobileMenuBtn').setAttribute('aria-expanded','false')}
+$('mobileMenuBtn').addEventListener('click',ev=>{ev.stopPropagation();const h=document.querySelector('header');const opened=h.classList.toggle('menu-open');$('mobileMenuBtn').setAttribute('aria-expanded',String(opened))});
+$('fileMenu').addEventListener('click',e=>{if(e.target.closest('button'))closeFileMenu()});
+document.addEventListener('pointerdown',e=>{if(!e.target.closest('header'))closeFileMenu()});
+window.addEventListener('keydown',e=>{if(e.key==='Escape')closeFileMenu()});
+window.addEventListener('resize',()=>{
+ if(window.innerWidth<=750){let current=document.querySelector('[data-pane].active')?.dataset.pane||'shapes';mobileTab(current)}
+ else{
+  closeFileMenu();$('app').classList.remove('panel-collapsed');
+  $('leftPanel').classList.remove('mobile-hidden');$('rightPanel').classList.remove('mobile-open');
+  $('shapesSection').style.display='block';$('objectsSection').style.display='block';$('settingsSection').style.display='block';
+  resize();invalidate();
+ }
+});
+function boot(){try{let previous=localStorage.getItem(stateKey);if(previous){let saved=JSON.parse(previous);project=validate(saved.project);nextId=Math.max(1,...project.objects.map(o=>o.id))+1;camera=validateCamera(saved.camera)}else seedScene()}catch(e){console.warn('Local project could not be restored',e);project={version:1,name:'Camp Workshop',objects:[],settings:defaultSettings()};seedScene()}setupGL();ui();$('bootNotice').classList.add('hide');if(window.innerWidth<=750)mobileTab('shapes');requestAnimationFrame(frame);if(!gl)toast('Open in Safari with WebGL2 for 3D viewing')}
+boot();
+</script>
+</body>
+</html>
